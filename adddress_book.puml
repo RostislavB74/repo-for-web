@@ -1,0 +1,100 @@
+@startuml
+title Project Personal Assistant
+struct "Menu" as Menu{
+    "AddressBook📒"
+    "NoteBook📋"
+    "Files sorter📂"
+    "Exit❌"
+}
+
+Menu --|> AddressBook
+abstract class "Field" as Field {
+    __getitem__()
+    __str__(self) -> str
+    __repr__(self) -> str
+    }
+annotation @abstractmethod {
+    __getitem__()
+    }
+together{
+    class "Name" as Name{
+        __init__(self, value)
+        __getitem__(self)
+        }
+    class "Phone" as  Phone{
+        __init__(self, value='')
+        value(self)
+        value(self, value)
+        __str__(self)
+        __getitem__(self)
+        }
+    class "Birthday" as  Birthday{
+        __init__(self, value='')
+        __getitem__(self)
+        }
+    class "Email" as Email{
+        __init__(self, value='')
+        value(self)
+        value(self, value)
+        __str__(self)
+        __getitem__(self)
+        }
+    class "Address" as  Address{
+        __init__(self, value):
+        self.__value = None
+        self.value = value
+        __getitem__(self)
+        }
+    class "Note" as  Note{
+        __init__(self, value):
+        self.__value= None
+        self.value = value
+        __getitem__(self):
+        }
+    }
+class "Record" as Record{
+    -__init__(self, date) -> None:
+
+    -self.name : str
+    -self.phones : list
+    -self.birthday : date
+    -self.emails : list
+    -self.address : str
+    -self.note : str
+    +add_birthday()
+    +add_phone()
+    +add_email()
+    +change_phone()
+    +days_to_birthday()
+    +get_phones()
+    +remove_phone()
+    -__str__(self) -> str:
+    }
+class "AddressBook" as AddressBook{
+    add_record(self, record: Record)
+    __str__(self)
+    +serialize_to_csv(self)
+    +serialize_to_json(self)
+    +save(self)
+    +load(self, file_name)
+    +get_current_week(self)
+    -congratulate(self)
+    +show_all_address_book(self)
+    +search(self, s: str)
+    }
+    Name --o Record
+    Phone --o Record
+    Birthday --o Record
+    Email --o Record
+    Address --o Record
+    Note --o Record
+
+    Record<|--o AddressBook
+
+    Field <-- Name
+    Field <-- Phone
+    Field <-- Birthday
+    Field <-- Email
+    Field <-- Address
+    Field <-- Note
+@enduml
