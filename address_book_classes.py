@@ -7,6 +7,8 @@ import re
 from rich.console import Console
 from rich.table import Table
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Any
 
 
 class Field(ABC):
@@ -23,7 +25,7 @@ class Field(ABC):
         return str(self)
 
 
-class Name(Field):
+class ContactName(Field):
 
     def __init__(self, value):
         name = value.split(" ")
@@ -37,7 +39,7 @@ class Name(Field):
         return self.value
 
 
-class Phone(Field):
+class ContactPhone(Field):
 
     def __init__(self, value=''):
         while True:
@@ -77,11 +79,11 @@ class Phone(Field):
         return self.__value
 
 
-class BirthdayError(Exception):
+class ConractBirthdayError(Exception):
     ...
 
 
-class Birthday(Field):
+class ContactBirthday(Field):
 
     def __init__(self, value=''):
         while True:
@@ -106,7 +108,7 @@ class Birthday(Field):
         return self.value.date()
 
 
-class Email(Field):
+class ContactEmail(Field):
     def __init__(self, value=''):
         while True:
             if value:
@@ -140,7 +142,7 @@ class Email(Field):
         return self.value
 
 
-class Address(Field):
+class ContactAddress(Field):
     def __init__(self, value):
         self.__value = None
         self.value = value
@@ -149,7 +151,7 @@ class Address(Field):
         return self.value
 
 
-class Note(Field):
+class ContactNote(Field):
     def __init__(self, value):
         self.__value = None
         self.value = value
@@ -158,7 +160,7 @@ class Note(Field):
         return self.value
 
 
-class Record:
+class ContactRecord:
 
     def __init__(self, name: Name, phone: Phone = None, birthday: Birthday = None, email: Email = None,
                  address: Address = None, note: Note = None) -> None:
@@ -398,39 +400,39 @@ class AddressBook(UserDict):
         s : str
             a string representing the search term
         """
-        result_dict = AddressBook()
-        for key, record in self.data.items():
-            if any(
-                s in str(value)
-                for value in [
-                    record.name,
-                    record.birthday,
-                    record.address,
-                    record.note,
-                ]
-            ) or any(s in phone for phone in record.phones) or any(
-                s in email for email in record.emails
-            ):
-                result_dict.data[key] = record
-
-        return result_dict.show_all_address_book()
-        # output = []
         # result_dict = AddressBook()
-        # for key in self.keys():
-        #     rec = self[key]
-        #     phone = '.'.join(phone for phone in rec.phones)
+        # for key, record in self.data.items():
+        #     if any(
+        #         s in str(value)
+        #         for value in [
+        #             record.name,
+        #             record.birthday,
+        #             record.address,
+        #             record.note,
+        #         ]
+        #     ) or any(s in phone for phone in record.phones) or any(
+        #         s in email for email in record.emails
+        #     ):
+        #         result_dict.data[key] = record
 
-        #     if rec.birthday == "":
-        #         show_birthday = ""
-        #     else:
-        #         show_birthday = datetime.strftime(rec.birthday, '%d/%m/%Y')
-
-        #     emails = ".".join(email for email in rec.emails)
-        #     address = rec.address
-        #     note = rec.note
-
-        #     if s in str(rec.name) or s in phone or s in show_birthday or s in emails or s in address or s in note:
-        #         output.append(rec)
-        #     for item in output:
-        #         result_dict[item.name] = item
         # return result_dict.show_all_address_book()
+        output = []
+        result_dict = AddressBook()
+        for key in self.keys():
+            rec = self[key]
+            phone = '.'.join(phone for phone in rec.phones)
+
+            if rec.birthday == "":
+                show_birthday = ""
+            else:
+                show_birthday = datetime.strftime(rec.birthday, '%d/%m/%Y')
+
+            emails = ".".join(email for email in rec.emails)
+            address = rec.address
+            note = rec.note
+
+            if s in str(rec.name) or s in phone or s in show_birthday or s in emails or s in address or s in note:
+                output.append(rec)
+            for item in output:
+                result_dict[item.name] = item
+        return result_dict.show_all_address_book()
