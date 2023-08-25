@@ -25,6 +25,16 @@ class Field(ABC):
         return str(self)
 
 
+class ContactUid(Field):
+    current_uid = 0
+
+    def __init__(self):
+        ContactUid.current_uid += 1
+        self.uid = ContactUid.current_uid
+
+    def __getitem__(self):
+        return self.uid
+
 class ContactName(Field):
 
     def __init__(self, value):
@@ -159,11 +169,15 @@ class ContactNote(Field):
     def __getitem__(self):
         return self.value
 
-
 class ContactRecord:
-
-    def __init__(self, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
+    def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
                  address: ContactAddress = None, note: ContactNote = None) -> None:
+        self.uid = uid
+# class ContactRecord:
+
+#     def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
+#                  address: ContactAddress = None, note: ContactNote = None) -> None:
+        # self.uid = uid
         self.name = name
         self.phones = []
         self.birthday = birthday
@@ -224,13 +238,14 @@ class ContactRecord:
         console = Console()
         table = Table(show_header=True, header_style="bold magenta",
                       width=120, show_lines=True)
+        table.add_column("UID", width=40, no_wrap=False)
         table.add_column("Name", width=40, no_wrap=False)
         table.add_column("Phones", width=40, no_wrap=False)
         table.add_column("Birthday", width=40, no_wrap=False)
         table.add_column("Emails", width=40, no_wrap=False)
         table.add_column("Address", width=40, no_wrap=False)
         table.add_column("Note", width=40, no_wrap=False)
-
+        uid = str(self.uid)
         name = self.name
         phones = ", ".join(str(phone) for phone in self.phones)
         bday = str(self.birthday) if self.birthday else ""
@@ -238,7 +253,7 @@ class ContactRecord:
         address = str(self.address) if self.address else ""
         note = str(self.note) if self.note else ""
 
-        table.add_row(name, phones, bday, emails, address, note)
+        table.add_row(uid, name, phones, bday, emails, address, note)
 
         console.print(table)
         return "\nSuccess!\n"
@@ -256,8 +271,8 @@ class ContactRecord:
 class AddressBook(UserDict):
 
     def add_record(self, record: ContactRecord):
-        self.data[str(record.name)] = record
-        print(f"\nContact  '{record.name}' successfully added")
+        self.data[record.uid] = record
+        print(f"\nContact  '{record.uid}' successfully added")
 
         return record
 
@@ -282,6 +297,7 @@ class AddressBook(UserDict):
         with open(filename, "w", newline="") as file:
             writer = csv.writer(file)
             for rec in self.data.values():
+                uid = rec.uid
                 name = rec.name
                 phones = [phone for phone in rec.phones]
                 birthday = rec.birthday.strftime(
@@ -290,7 +306,7 @@ class AddressBook(UserDict):
                 address = rec.address
                 note = rec.note
                 writer.writerow(
-                    [name, ",".join(phones), birthday, ",".join(emails), address, note])
+                    [uid, name, ",".join(phones), birthday, ",".join(emails), address, note])
         return 'Saved data to .csv'
 
     def serialize_to_json(self):
@@ -298,6 +314,7 @@ class AddressBook(UserDict):
         data_list = []
         for record in self.data.values():
             data = {
+                "UID": record.uid,
                 "name": record.name,
                 "phones": [phone for phone in record.phones],
                 "birthday": record.birthday.strftime("%d/%m/%Y") if record.birthday else "",
@@ -355,20 +372,21 @@ class AddressBook(UserDict):
         return '! Do not forget to congratulate !\n' + '_' * 59 + '\n' + '\n'.join(result) + '\n' + '_' * 59
 
     def _format_record(self, record):
+        uid = record.uid
         name = record.name
         phones = ", ".join(str(phone) for phone in record.phones)
         bday = str(record.birthday) if record.birthday else ""
         emails = ", ".join(str(email) for email in record.emails)
         address = str(record.address) if record.address else ""
         note = str(record.note) if record.note else ""
-        return name, phones, bday, emails, address, note
+        return uid, name, phones, bday, emails, address, note
 
     def __str__(self):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            name, phones, bday, emails, address, note = self._format_record(record)
-            table.add_row(name, phones, bday, emails, address, note)
+            uid, name, phones, bday, emails, address, note = self._format_record(record)
+            table.add_row(uid, name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
 
@@ -376,14 +394,15 @@ class AddressBook(UserDict):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            name, phones, bday, emails, address, note = self._format_record(record)
-            table.add_row(name, phones, bday, emails, address, note)
+            uid, name, phones, bday, emails, address, note = self._format_record(record)
+            table.add_row(uid, name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
 
     def _create_table(self):
         table = Table(show_header=True, header_style="bold magenta",
                       width=120, show_lines=True)
+        table.add_column("UID", width=40, no_wrap=False)
         table.add_column("Name", width=40, no_wrap=False)
         table.add_column("Phones", width=40, no_wrap=False)
         table.add_column("Birthday", width=40, no_wrap=False)
@@ -400,22 +419,6 @@ class AddressBook(UserDict):
         s : str
             a string representing the search term
         """
-        # result_dict = AddressBook()
-        # for key, record in self.data.items():
-        #     if any(
-        #         s in str(value)
-        #         for value in [
-        #             record.name,
-        #             record.birthday,
-        #             record.address,
-        #             record.note,
-        #         ]
-        #     ) or any(s in phone for phone in record.phones) or any(
-        #         s in email for email in record.emails
-        #     ):
-        #         result_dict.data[key] = record
-
-        # return result_dict.show_all_address_book()
         output = []
         result_dict = AddressBook()
         for key in self.keys():

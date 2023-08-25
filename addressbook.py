@@ -1,5 +1,5 @@
 import functools
-from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook
+from address_book_classes import ContactUid, ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook
 from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
 
@@ -26,7 +26,8 @@ def input_errors(func):
 
 @input_errors
 def add(*args):
-    name = Name(input("Name: ")).value.strip()
+    uid = ContactUid
+    name = ContactName(input("Name: ")).value.strip()
     for el in address_book.keys():
         if name == el:
             return "This name already exist, use different name!"
@@ -36,7 +37,7 @@ def add(*args):
         email = ContactEmail().value.strip()
         address = ContactAddress(input("Address: ")).value
         note = ContactNote(input("Note: ")).value
-        record = ContactRecord(name=name, phone=phones, birthday=birthday,
+        record = ContactRecord(uid = uid, name=name, phone=phones, birthday=birthday,
                         email=email, address=address, note=note)
     return address_book.add_record(record)
 
