@@ -30,6 +30,7 @@ class ContactUid(Field):
     def __init__(self):
         ContactUid.current_uid += 1
         self.uid = ContactUid.current_uid
+        return self.uid
 
     def __getitem__(self):
         return self.uid
@@ -380,7 +381,7 @@ class AddressBook(UserDict):
         emails = ", ".join(str(email) for email in record.emails)
         address = str(record.address) if record.address else ""
         note = str(record.note) if record.note else ""
-        return name, phones, bday, emails, address, note
+        return uid, name, phones, bday, emails, address, note
 
     def __str__(self):
         console = Console()
@@ -392,6 +393,14 @@ class AddressBook(UserDict):
         console.print(table)
         return "Success!\n"
 
+    # def show_all_address_book(self):
+    #     console = Console()
+    #     table = self._create_table()
+    #     for record in self.data.values():
+    #         name, phones, bday, emails, address, note = self._format_record(record)
+    #         table.add_row(name, phones, bday, emails, address, note)
+    #     console.print(table)
+    #     return "Success!\n"
     def show_all_address_book(self):
         console = Console()
         table = self._create_table()

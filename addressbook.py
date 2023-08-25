@@ -4,7 +4,6 @@ from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
 
 
-
 address_book = AddressBook()
 filename = 'address_book'
 
@@ -28,17 +27,17 @@ def input_errors(func):
 def add(*args):
     uid = ContactUid
     name = ContactName(input("Name: ")).value.strip()
-    for el in address_book.keys():
-        if name == el:
-            return "This name already exist, use different name!"
-    else:
-        phones = ContactPhone().value
-        birthday = ContactBirthday().value
-        email = ContactEmail().value.strip()
-        address = ContactAddress(input("Address: ")).value
-        note = ContactNote(input("Note: ")).value
-        record = ContactRecord(uid = uid, name=name, phone=phones, birthday=birthday,
-                        email=email, address=address, note=note)
+    # for el in address_book.keys():
+    #     if name == el:
+    #         return "This name already exist, use different name!"
+    # else:
+    phones = ContactPhone().value
+    birthday = ContactBirthday().value
+    email = ContactEmail().value.strip()
+    address = ContactAddress(input("Address: ")).value
+    note = ContactNote(input("Note: ")).value
+    record = ContactRecord(uid=uid, name=name, phone=phones, birthday=birthday,
+                           email=email, address=address, note=note)
     return address_book.add_record(record)
 
 
@@ -48,7 +47,8 @@ def edit_contacts(*args):
     if name not in address_book.keys():
         return "\nThis name not exist! Use 'show all' to show contacts...\n"
     else:
-        parameter = input('Which parameter to edit(phones, birthday, email, address, note): ').strip()
+        parameter = input(
+            'Which parameter to edit(phones, birthday, email, address, note): ').strip()
         try:
             if parameter not in ("phones", "birthday", "email", "address", "note"):
                 raise ValueError
@@ -213,8 +213,8 @@ def addressbook_starter():
                 address_book.save()
             if result:
                 print(result)
-    #address_book.save()
-    
+    # address_book.save()
+
 
 if __name__ == "__main__":
     addressbook_starter()
