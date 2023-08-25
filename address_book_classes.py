@@ -162,8 +162,8 @@ class ContactNote(Field):
 
 class ContactRecord:
 
-    def __init__(self, name: Name, phone: Phone = None, birthday: Birthday = None, email: Email = None,
-                 address: Address = None, note: Note = None) -> None:
+    def __init__(self, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
+                 address: ContactAddress = None, note: ContactNote = None) -> None:
         self.name = name
         self.phones = []
         self.birthday = birthday
@@ -181,19 +181,19 @@ class ContactRecord:
             else:
                 self.phones.append(phone)
     
-    def add_birthday(self, birthday: Birthday):
+    def add_birthday(self, birthday: ContactBirthday):
         if not self.birthday:
             self.birthday = birthday
             return f"birthday {birthday} added to contact {self.name}"
         return f"{self.birthday} is already present in the birthday data of contact {self.name}"
     
-    def add_phone(self, phone: Phone):
+    def add_phone(self, phone: ContactPhone):
         if phone.value.strip() not in [p.value.strip() for p in self.phones]:
             self.phones.append(phone)
             return f"phone {phone.value} added to contact {self.name}"
         return f"{phone.value} is already present in the phones of contact {self.name}"
     
-    def add_email(self, email: Email):
+    def add_email(self, email: ContactEmail):
         if email.value in [e.value for e in self.emails]:
             return f"{email} present in emails of contact {self.name}"
         self.emails.append(email)
@@ -206,7 +206,7 @@ class ContactRecord:
                 return f"old phone {old_phone} change to {new_phone}"
         return f"{old_phone} not present in phones of contact {self.name}"
 
-    def days_to_birthday(self, birthday: Birthday):
+    def days_to_birthday(self, birthday: ContactBirthday):
         str_date = str(birthday)
         now = datetime.now()
         then = datetime.strptime(str_date, "%Y-%m-%d")
@@ -255,7 +255,7 @@ class ContactRecord:
 
 class AddressBook(UserDict):
 
-    def add_record(self, record: Record):
+    def add_record(self, record: ContactRecord):
         self.data[str(record.name)] = record
         print(f"\nContact  '{record.name}' successfully added")
 
