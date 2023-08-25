@@ -7,14 +7,13 @@ import re
 from rich.console import Console
 from rich.table import Table
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Any
 
 
 class Field(ABC):
     @abstractmethod
     def __getitem__(self):
         pass
+
     def __init__(self, value) -> None:
         self.value = value
 
@@ -34,6 +33,7 @@ class ContactUid(Field):
 
     def __getitem__(self):
         return self.uid
+
 
 class ContactName(Field):
 
@@ -169,6 +169,7 @@ class ContactNote(Field):
     def __getitem__(self):
         return self.value
 
+
 class ContactRecord:
     def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
                  address: ContactAddress = None, note: ContactNote = None) -> None:
@@ -177,7 +178,7 @@ class ContactRecord:
 
 #     def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
 #                  address: ContactAddress = None, note: ContactNote = None) -> None:
-        # self.uid = uid
+        self.uid = uid
         self.name = name
         self.phones = []
         self.birthday = birthday
@@ -194,19 +195,19 @@ class ContactRecord:
                 self.phones.extend(phone)
             else:
                 self.phones.append(phone)
-    
+
     def add_birthday(self, birthday: ContactBirthday):
         if not self.birthday:
             self.birthday = birthday
             return f"birthday {birthday} added to contact {self.name}"
         return f"{self.birthday} is already present in the birthday data of contact {self.name}"
-    
+
     def add_phone(self, phone: ContactPhone):
         if phone.value.strip() not in [p.value.strip() for p in self.phones]:
             self.phones.append(phone)
             return f"phone {phone.value} added to contact {self.name}"
         return f"{phone.value} is already present in the phones of contact {self.name}"
-    
+
     def add_email(self, email: ContactEmail):
         if email.value in [e.value for e in self.emails]:
             return f"{email} present in emails of contact {self.name}"
@@ -379,13 +380,14 @@ class AddressBook(UserDict):
         emails = ", ".join(str(email) for email in record.emails)
         address = str(record.address) if record.address else ""
         note = str(record.note) if record.note else ""
-        return uid, name, phones, bday, emails, address, note
+        return name, phones, bday, emails, address, note
 
     def __str__(self):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            uid, name, phones, bday, emails, address, note = self._format_record(record)
+            uid, name, phones, bday, emails, address, note = self._format_record(
+                record)
             table.add_row(uid, name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
@@ -394,7 +396,8 @@ class AddressBook(UserDict):
         console = Console()
         table = self._create_table()
         for record in self.data.values():
-            uid, name, phones, bday, emails, address, note = self._format_record(record)
+            uid, name, phones, bday, emails, address, note = self._format_record(
+                record)
             table.add_row(uid, name, phones, bday, emails, address, note)
         console.print(table)
         return "Success!\n"
