@@ -1,8 +1,7 @@
 import functools
-from address_book_classes import Record, Name, Phone, Birthday, Email, Address, Note, AddressBook
+from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook
 from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
-
 
 
 address_book = AddressBook()
@@ -26,18 +25,18 @@ def input_errors(func):
 
 @input_errors
 def add(*args):
-    name = Name(input("Name: ")).value.strip()
+    name = ContactName(input("Name: ")).value.strip()
     for el in address_book.keys():
         if name == el:
             return "This name already exist, use different name!"
     else:
-        phones = Phone().value
-        birthday = Birthday().value
-        email = Email().value.strip()
-        address = Address(input("Address: ")).value
-        note = Note(input("Note: ")).value
-        record = Record(name=name, phone=phones, birthday=birthday,
-                        email=email, address=address, note=note)
+        phones = ContactPhone().value
+        birthday = ContactBirthday().value
+        email = ContactEmail().value.strip()
+        address = ContactAddress(input("Address: ")).value
+        note = ContactNote(input("Note: ")).value
+        record = ContactRecord(name=name, phone=phones, birthday=birthday,
+                               email=email, address=address, note=note)
     return address_book.add_record(record)
 
 
@@ -47,36 +46,37 @@ def edit_contacts(*args):
     if name not in address_book.keys():
         return "\nThis name not exist! Use 'show all' to show contacts...\n"
     else:
-        parameter = input('Which parameter to edit(phones, birthday, email, address, note): ').strip()
+        parameter = input(
+            'Which parameter to edit(phones, birthday, email, address, note): ').strip()
         try:
             if parameter not in ("phones", "birthday", "email", "address", "note"):
                 raise ValueError
             else:
                 new_value = input("New Value: ")
-                res: Record = address_book.get(str(name))
+                res: ContactRecord = address_book.get(str(name))
 
             try:
                 if res:
                     if parameter == 'birthday':
-                        new_value = Birthday(new_value).value
+                        new_value = ContactBirthday(new_value).value
                     elif parameter == 'email':
                         parameter = 'emails'
                         new_contact = new_value.split(' ')
                         new_value = []
                         for emails in new_contact:
-                            new_value.append(Email(emails).value)
+                            new_value.append(ContactEmail(emails).value)
                     elif parameter == 'address':
-                        new_value = Address(new_value).value
+                        new_value = ContactAddress(new_value).value
                     elif parameter == 'note':
-                        new_value = Note(new_value).value
+                        new_value = ContactNote(new_value).value
                     elif parameter == 'phones':
                         new_contact = new_value.split(' ')
                         new_value = []
                         for number in new_contact:
-                            new_value.extend(Phone(number).value)
+                            new_value.extend(ContactPhone(number).value)
                     if parameter in res.__dict__.keys():
                         res.__dict__[parameter] = new_value
-                res: Record = address_book.get(str(name))
+                res: ContactRecord = address_book.get(str(name))
                 return res
             except ValueError:
                 print('Incorrect parameter! Please provide correct parameter')
@@ -88,7 +88,7 @@ def edit_contacts(*args):
 
 @input_errors
 def delete_record(*args):
-    name = Name(input("Name: ")).value.strip()
+    name = ContactName(input("Name: ")).value.strip()
     if name in address_book:
         del address_book[name]
         return f"Contact '{name}' has been deleted from the address book."
@@ -97,9 +97,9 @@ def delete_record(*args):
 
 @input_errors
 def remove_phone(*args):
-    name = Name(input("Name: ")).value.strip()
-    phone = Phone(input("Phone: "))
-    rec: Record = address_book.get(str(name))
+    name = ContactName(input("Name: ")).value.strip()
+    phone = ContactPhone(input("Phone: "))
+    rec: ContactRecord = address_book.get(str(name))
     if rec:
         return rec.remove_phone(phone.values)
     return f"No contact {name} in address book"
@@ -112,15 +112,15 @@ def search(*args) -> str:
 
 
 def show_all_address_book():
-    if Record.__name__:
+    if ContactRecord.__name__:
         return address_book.show_all_address_book()
 
 
 @input_errors
 def get_days_to_birthday(*args):
-    name = Name(input("Name: ")).value.strip()
+    name = ContactName(input("Name: ")).value.strip()
     if name in address_book:
-        res: Record = address_book.get(str(name))
+        res: ContactRecord = address_book.get(str(name))
         result = int(res.days_to_birthday(res.birthday)) + 1
         if result == 0:
             return f'{name} tomorrow birthday'
@@ -212,8 +212,8 @@ def addressbook_starter():
                 address_book.save()
             if result:
                 print(result)
-    #address_book.save()
-    
+    # address_book.save()
+
 
 if __name__ == "__main__":
     addressbook_starter()
