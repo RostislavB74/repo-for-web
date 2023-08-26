@@ -28,6 +28,9 @@ class ContactUid(Field):
     current_uid = 0
 
     def __init__(self):
+        self.value = self.generate_uid()
+
+    def generate_uid(self):
         ContactUid.current_uid += 1
         self.uid = ContactUid.current_uid
         return self.uid
