@@ -56,9 +56,9 @@ def menu():
             factory = factories[user_input]
             factory.create_module()
             print("_" * 34)
-            print("|{:^30}|".format(f"✨ Main Menu Started! ✨"))
+            print("|{:^30}|".format("✨ Main Menu Started! ✨"))
             print("|" + "_" * 32 + "|")
-        
+
         else:
             print("_"*34)
             print("|{:^32}|".format("Wrong number... Try again..."))

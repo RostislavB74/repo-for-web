@@ -1,5 +1,5 @@
 import functools
-from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook
+from address_book_classes import ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
 from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
 
