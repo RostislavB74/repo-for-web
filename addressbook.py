@@ -23,7 +23,7 @@ def input_errors(func):
     return wrapper
 
 
-# @input_errors
+@input_errors
 def add(*args):
     uid = ContactUid().value
     # print(type(uid))
@@ -38,6 +38,7 @@ def add(*args):
     email = ContactEmail().value.strip()
     address = ContactAddress(input("Address: ")).value
     note = ContactNote(input("Note: ")).value
+
     record = ContactRecord(uid=uid, name=name, phone=phones, birthday=birthday,
                            email=email, address=address, note=note)
     print(record)
@@ -58,6 +59,7 @@ def edit_contacts(*args):
             else:
                 new_value = input("New Value: ")
                 res: ContactRecord = address_book.get(str(name))
+                print(res)
 
             try:
                 if res:

@@ -401,14 +401,6 @@ class AddressBook(UserDict):
         console.print(table)
         return "Success!\n"
 
-    # def show_all_address_book(self):
-    #     console = Console()
-    #     table = self._create_table()
-    #     for record in self.data.values():
-    #         name, phones, bday, emails, address, note = self._format_record(record)
-    #         table.add_row(name, phones, bday, emails, address, note)
-    #     console.print(table)
-    #     return "Success!\n"
     def show_all_address_book(self):
         console = Console()
         table = self._create_table()
