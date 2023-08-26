@@ -17,42 +17,42 @@ annotation @abstractmethod {
     __getitem__()
     }
 together{
-    class "Name" as Name{
+    class "ContactName" as Name{
         __init__(self, value)
         __getitem__(self)
         }
-    class "Phone" as  Phone{
+    class "ContactPhone" as  Phone{
         __init__(self, value='')
         value(self)
         value(self, value)
         __str__(self)
         __getitem__(self)
         }
-    class "Birthday" as  Birthday{
+    class "ContactBirthday" as  Birthday{
         __init__(self, value='')
         __getitem__(self)
         }
-    class "Email" as Email{
+    class "ContactEmail" as Email{
         __init__(self, value='')
         value(self)
         value(self, value)
         __str__(self)
         __getitem__(self)
         }
-    class "Address" as  Address{
+    class "ContactAddress" as  Address{
         __init__(self, value):
         self.__value = None
         self.value = value
         __getitem__(self)
         }
-    class "Note" as  Note{
+    class "ContactNote" as  Note{
         __init__(self, value):
         self.__value= None
         self.value = value
         __getitem__(self):
         }
     }
-class "Record" as Record{
+class "ContactRecord" as Record{
     -__init__(self, date) -> None:
 
     -self.name : str
