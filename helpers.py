@@ -31,4 +31,4 @@ def command_handler(user_input, commands):
     if possible_command:
         return f'Wrong command. Maybe you mean: {", ".join(possible_command)}'
     else:
-        return f'Wrong command.'
+        return 'Wrong command.'
