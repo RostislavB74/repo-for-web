@@ -366,7 +366,7 @@ class AddressBook(UserDict):
         note = str(record.note) if record.note else ""
         return name, phones, bday, emails, address, note
 
-    def __str__(self):
+    def __str__(self):  # noqa: F811
         console = Console()
         table = self._create_table()
         for record in self.data.values():
