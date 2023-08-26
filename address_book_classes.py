@@ -161,8 +161,12 @@ class ContactNote(ContactField):
 
 class ContactRecord:
 
-    def __init__(self, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,  # noqa: E501
-                 address: ContactAddress = None, note: ContactNote = None) -> None:
+    def __init__(self, name: ContactName,
+                 phone: ContactPhone = None,
+                 birthday: ContactBirthday = None,
+                 email: ContactEmail = None,
+                 address: ContactAddress = None,
+                 note: ContactNote = None) -> None:
         self.name = name
         self.phones = []
         self.birthday = birthday
