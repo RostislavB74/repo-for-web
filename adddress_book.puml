@@ -1,6 +1,7 @@
 @startuml
 title Project Personal Assistant
-struct "Menu" as Menu{
+
+struct "Menu" as Menu {
     "AddressBook📒"
     "NoteBook📋"
     "Files sorter📂"
@@ -8,7 +9,7 @@ struct "Menu" as Menu{
 }
 
 Menu --|> AddressBook
-abstract class "Field" as Field {
+abstract class "ContactField" as Field {
     __getitem__()
     __str__(self) -> str
     __repr__(self) -> str
