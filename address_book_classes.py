@@ -24,16 +24,26 @@ class Field(ABC):
         return str(self)
 
 
-class ContactUid(Field):
-    current_uid = 0
-
+class ContactUid:
     def __init__(self):
+        self.load_uid()  # Загрузка сохраненного значения uid
         self.value = self.generate_uid()
+        self.save_uid()  # Сохранение нового значения uid
 
     def generate_uid(self):
-        ContactUid.current_uid += 1
-        self.uid = ContactUid.current_uid
-        return self.uid
+        self.current_uid += 1
+        return self.current_uid
+
+    def save_uid(self):
+        with open('uid.pickle', 'wb') as f:
+            pickle.dump(self.current_uid, f)
+
+    def load_uid(self):
+        try:
+            with open('uid.pickle', 'rb') as f:
+                self.current_uid = pickle.load(f)
+        except FileNotFoundError:
+            self.current_uid = 0
 
     def __getitem__(self):
         return self.uid
@@ -62,7 +72,7 @@ class ContactPhone(Field):
                 self.values = value
             else:
                 self.values = input(
-                    'Please enter phone number in format +380998887722 (\'+\' symbol and 12 digits)')
+                    'Please enter phone number in format +380998887722 (\'+\' symbol and 12 digits)')  # noqa: E501
             try:
                 for number in self.values.split(' '):
                     if re.match(r'^\+\d{12}$', number) or number == '':
@@ -71,7 +81,7 @@ class ContactPhone(Field):
                         raise ValueError
             except ValueError:
                 print(
-                    'Incorrect phone number format! Please provide correct phone number format.')
+                    'Incorrect phone number format! Please provide correct phone number format.')  # noqa: E501
             else:
                 break
 
@@ -175,13 +185,8 @@ class ContactNote(Field):
 
 
 class ContactRecord:
-    def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
+    def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,  # noqa: E501
                  address: ContactAddress = None, note: ContactNote = None) -> None:
-        self.uid = uid
-# class ContactRecord:
-
-#     def __init__(self, uid: ContactUid, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
-#                  address: ContactAddress = None, note: ContactNote = None) -> None:
         self.uid = uid
         self.name = name
         self.phones = []
@@ -377,7 +382,7 @@ class AddressBook(UserDict):
         return '! Do not forget to congratulate !\n' + '_' * 59 + '\n' + '\n'.join(result) + '\n' + '_' * 59
 
     def _format_record(self, record):
-        uid = record.uid
+        uid = str(record.uid)
         name = record.name
         phones = ", ".join(str(phone) for phone in record.phones)
         bday = str(record.birthday) if record.birthday else ""

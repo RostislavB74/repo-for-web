@@ -1,5 +1,5 @@
 import functools
-from address_book_classes import ContactUid, ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook
+from address_book_classes import ContactUid, ContactRecord, ContactName, ContactPhone, ContactBirthday, ContactEmail, ContactAddress, ContactNote, AddressBook  # noqa: E501
 from datetime import date, timedelta, datetime
 from helpers import instruction, parser_input, command_handler
 
@@ -26,8 +26,8 @@ def input_errors(func):
 # @input_errors
 def add(*args):
     uid = ContactUid().value
-    print(type(uid))
-    print(uid)
+    # print(type(uid))
+    # print(uid)
     name = ContactName(input("Name: ")).value.strip()
     # for el in address_book.keys():
     #     if name == el:
@@ -40,6 +40,7 @@ def add(*args):
     note = ContactNote(input("Note: ")).value
     record = ContactRecord(uid=uid, name=name, phone=phones, birthday=birthday,
                            email=email, address=address, note=note)
+    print(record)
     return address_book.add_record(record)
 
 
