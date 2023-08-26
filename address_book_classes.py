@@ -47,7 +47,7 @@ class ContactPhone(ContactField):
                 self.values = value
             else:
                 self.values = input(
-                    'Please enter phone number in format +380998887722 (\'+\' symbol and 12 digits)')
+                    'Please enter phone number in format +380998887722 (\'+\' symbol and 12 digits)')  # noqa: E501
             try:
                 for number in self.values.split(' '):
                     if re.match(r'^\+\d{12}$', number) or number == '':
@@ -56,7 +56,7 @@ class ContactPhone(ContactField):
                         raise ValueError
             except ValueError:
                 print(
-                    'Incorrect phone number format! Please provide correct phone number format.')
+                    'Incorrect phone number format! Please provide correct phone number format.')  # noqa: E501
             else:
                 break
 
@@ -161,7 +161,7 @@ class ContactNote(ContactField):
 
 class ContactRecord:
 
-    def __init__(self, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,
+    def __init__(self, name: ContactName, phone: ContactPhone = None, birthday: ContactBirthday = None, email: ContactEmail = None,  # noqa: E501
                  address: ContactAddress = None, note: ContactNote = None) -> None:
         self.name = name
         self.phones = []
@@ -184,7 +184,7 @@ class ContactRecord:
         if not self.birthday:
             self.birthday = birthday
             return f"birthday {birthday} added to contact {self.name}"
-        return f"{self.birthday} is already present in the birthday data of contact {self.name}"
+        return f"{self.birthday} is already present in the birthday data of contact {self.name}"  # noqa: E501
 
     def add_phone(self, phone: ContactPhone):
         if phone.value.strip() not in [p.value.strip() for p in self.phones]:
@@ -299,7 +299,7 @@ class AddressBook(UserDict):
             data = {
                 "name": record.name,
                 "phones": [phone for phone in record.phones],
-                "birthday": record.birthday.strftime("%d/%m/%Y") if record.birthday else "",
+                "birthday": record.birthday.strftime("%d/%m/%Y") if record.birthday else "",  # noqa: E501
                 "emails": [email for email in record.emails],
                 "address": record.address,
                 "note": record.note
@@ -351,7 +351,7 @@ class AddressBook(UserDict):
         for key, value in congratulate.items():
             if len(value):
                 result.append(f"{key}: {', '.join(value)}")
-        return '! Do not forget to congratulate !\n' + '_' * 59 + '\n' + '\n'.join(result) + '\n' + '_' * 59
+        return '! Do not forget to congratulate !\n' + '_' * 59 + '\n' + '\n'.join(result) + '\n' + '_' * 59  # noqa: E501
 
     def _format_record(self, record):
         name = record.name
@@ -394,29 +394,14 @@ class AddressBook(UserDict):
         return table
 
     def search(self, s: str):
-        """Used to search for a specific contact in the address book based on a given search term
+        """Used to search for a specific contact in the address book 
+        based on a given search term
 
         Parameters
         ----------
         s : str
             a string representing the search term
         """
-        # result_dict = AddressBook()
-        # for key, record in self.data.items():
-        #     if any(
-        #         s in str(value)
-        #         for value in [
-        #             record.name,
-        #             record.birthday,
-        #             record.address,
-        #             record.note,
-        #         ]
-        #     ) or any(s in phone for phone in record.phones) or any(
-        #         s in email for email in record.emails
-        #     ):
-        #         result_dict.data[key] = record
-
-        # return result_dict.show_all_address_book()
         output = []
         result_dict = AddressBook()
         for key in self.keys():
@@ -432,7 +417,7 @@ class AddressBook(UserDict):
             address = rec.address
             note = rec.note
 
-            if s in str(rec.name) or s in phone or s in show_birthday or s in emails or s in address or s in note:
+            if s in str(rec.name) or s in phone or s in show_birthday or s in emails or s in address or s in note:  # noqa: E501
                 output.append(rec)
             for item in output:
                 result_dict[item.name] = item
