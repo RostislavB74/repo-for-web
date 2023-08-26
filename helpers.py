@@ -27,8 +27,9 @@ def parser_input(txt_comm: str, command_dict):
 def command_handler(user_input, commands):
     if user_input in commands:
         return commands[user_input][0]()
-    possible_command = difflib.get_close_matches(user_input, commands, cutoff=0.5)
+    possible_command = difflib.get_close_matches(
+        user_input, commands, cutoff=0.5)
     if possible_command:
         return f'Wrong command. Maybe you mean: {", ".join(possible_command)}'
     else:
-        return f'Wrong command.'
+        return 'Wrong command.'
