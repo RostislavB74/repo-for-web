@@ -23,9 +23,11 @@ def input_errors(func):
     return wrapper
 
 
-@input_errors
+# @input_errors
 def add(*args):
-    uid = ContactUid
+    uid = ContactUid().value
+    print(type(uid))
+    print(uid)
     name = ContactName(input("Name: ")).value.strip()
     # for el in address_book.keys():
     #     if name == el:
